@@ -26,16 +26,22 @@ def update_thetas(host="127.0.0.1", port=65431):
 
 
 def main():
-    with open("training_results.json", "r") as file:
+    with open(".training_results.json", "r") as file:
         tr = json.load(file)
-        theta0 = tr['theta0']
-        theta1 = tr['theta1']
+        theta0 = tr["theta0"]
+        theta1 = tr["theta1"]
     listener_thread = threading.Thread(target=update_thetas, daemon=True)
     listener_thread.start()
     while True:
-        mileage = int(input("Enter the mileage: "))
-        print(f"the estimated price for this mileag is: {theta0 + (theta1 * mileage)}")
-
+        try:
+            mileage = int(input("Enter the mileage: "))
+            print(
+                f"the estimated price for this mileag is: {theta0 + (theta1 * mileage)}"
+            )
+        except (KeyboardInterrupt, EOFError):
+            break
+        except Exception as e:
+            print(e)
 
 
 if __name__ == "__main__":
